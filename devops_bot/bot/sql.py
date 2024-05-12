@@ -12,7 +12,7 @@ PASSWORD = os.getenv('DB_PASSWORD')
 HOST = os.getenv('DB_HOST')
 PORT = os.getenv('DB_PORT')
 DATABASE = os.getenv('DB_DATABASE')
-
+logging.info(f"{USER}, {PASSWORD}, {HOST}, {PORT}, {DATABASE}")
 
 async def fetch_from_db(query, *params):
     logging.info(f"Подключение к БД")
