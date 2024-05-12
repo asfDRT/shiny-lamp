@@ -32,7 +32,7 @@ async def get_emails():
     try:
         return await fetch_from_db("SELECT email FROM email_table")
     except Exception as e:
-        logging.CRITICAL(f"Произошла ошибка в запросе к phone {e}")
+        logging.log(logging.CRITICAL, f"Произошла ошибка в запросе к phone {e}")
 
 
 async def get_phone_numbers():
@@ -40,7 +40,7 @@ async def get_phone_numbers():
     try:
         return await fetch_from_db("SELECT phone_number FROM phone_table")
     except Exception as e:
-        logging.CRITICAL(f"Произошла ошибка в запросе к phone {e}")
+        logging.log(logging.CRITICAL, f"Произошла ошибка в запросе к phone {e}"))
 
 
 async def insert_email(email):
