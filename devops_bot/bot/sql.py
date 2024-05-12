@@ -40,7 +40,7 @@ async def get_phone_numbers():
     try:
         return await fetch_from_db("SELECT phone_number FROM phone_table")
     except Exception as e:
-        logging.log(f"Произошла ошибка в запросе к phone {e}"))
+        logging.log(f"Произошла ошибка в запросе к phone {e}")
 
 
 async def insert_email(email):
