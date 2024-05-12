@@ -499,17 +499,13 @@ async def get_repl_logs_ansible(message: Message):
     try:
         output = await ssh_command_for_bd(command)
         if output:
-            if len(output) > 4095:
-                limited_output = output[-4095:]
-            else:
-                limited_output = output
-
+            limited_output = output[:4095]
             await message.answer(f"```\nПоследние логи репликации:\n{limited_output}\n```", parse_mode=ParseMode.MARKDOWN_V2)
         else:
             await message.answer("Логи репликации не найдены.")
     except Exception as e:
         logging.critical(f"Ошибка выполнения команды: {e}")
-        await message.answer("Произошла ошибка при выполнении команды.")
+        await message.answer("Произошла ошибка при выполнении команды."
 
 
 
