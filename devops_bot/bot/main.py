@@ -172,7 +172,9 @@ async def find_email(message: Message):
                          "- /get_services - SSH информация о запущенных сервисах\n"
                          "- /get_repl_logs - Запроси логов реплекации\n"
                          "- /get_emails - получение email из БД\n"
-                         "- /get_phone_numbers - получение phone из БД\n")
+                         "- /get_phone_numbers - получение phone из БД\n"
+                         "!!!!!!!!!!!!!!!!!!!!"
+                         "get_repl_logs_ansible - Получение логов репликации при использовании ansible\n")
 
 
 async def ssh_command(command: str) -> str:
@@ -202,8 +204,8 @@ async def ssh_command(command: str) -> str:
 async def ssh_command_for_bd(command: str) -> str:
     host = os.getenv('DB_HOST')
     port = os.getenv('RM_PORT')
-    username = os.getenv('RM_USER')
-    password = os.getenv('RM_PASSWORD')
+    username = os.getenv('DB_USER')
+    password = os.getenv('DB_PASSWORD')
 
     ssh_client = paramiko.SSHClient()
     ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -484,6 +486,25 @@ def escape_markdown(text):
     """
     escape_chars = '_*[]()~`>#+-=|{}.!'
     return ''.join('\\' + char if char in escape_chars else char for char in text)
+
+
+@dp.message_handler(Command("get_repl_logs_ansible"))
+async def get_repl_logs_ansible(message: Message):
+    """
+    Получение самого свежего лога репликации
+    """
+    logging.info(f"Пользователь {message.from_user.id} запросил логи репликации")
+    command = "ls -t /var/lib/postgresql/14/main/log/*.log | head -1 | xargs grep 'replication'"
+
+    try:
+        output = await ssh_command_for_bd(command)
+        if output:
+            await message.answer(f"```\nПоследние логи репликации:\n{output}\n```", parse_mode=ParseMode.MARKDOWN_V2)
+        else:
+            await message.answer("Логи репликации не найдены.")
+    except Exception as e:
+        logging.critical(f"Ошибка выполнения команды: {e}")
+        await message.answer("Произошла ошибка при выполнении команды.")
 
 
 
