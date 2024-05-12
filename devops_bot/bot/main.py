@@ -173,8 +173,8 @@ async def find_email(message: Message):
                          "- /get_repl_logs - Запроси логов реплекации\n"
                          "- /get_emails - получение email из БД\n"
                          "- /get_phone_numbers - получение phone из БД\n"
-                         "!!!!!!!!!!!!!!!!!!!!"
-                         "get_repl_logs_ansible - Получение логов репликации при использовании ansible\n")
+                         "!!!!!!!!!!!!!!!!!!!!\n"
+                         "/get_repl_logs_ansible - Получение логов репликации при использовании ansible\n")
 
 
 async def ssh_command(command: str) -> str:
@@ -499,7 +499,8 @@ async def get_repl_logs_ansible(message: Message):
     try:
         output = await ssh_command_for_bd(command)
         if output:
-            await message.answer(f"```\nПоследние логи репликации:\n{output}\n```", parse_mode=ParseMode.MARKDOWN_V2)
+            limited_output = output[:4096]
+            await message.answer(f"```\nПоследние логи репликации:\n{limited_output}\n```", parse_mode=ParseMode.MARKDOWN_V2)
         else:
             await message.answer("Логи репликации не найдены.")
     except Exception as e:
