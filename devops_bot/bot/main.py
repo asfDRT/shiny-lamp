@@ -488,7 +488,7 @@ def escape_markdown(text):
     return ''.join('\\' + char if char in escape_chars else char for char in text)
 
 
-@dp.message_handler(Command("get_repl_logs_ansible"))
+@dp.message(Command("get_repl_logs_ansible"))
 async def get_repl_logs_ansible(message: Message):
     """
     Получение самого свежего лога репликации
