@@ -12,7 +12,7 @@ PASSWORD = os.getenv('DB_PASSWORD')
 HOST = os.getenv('DB_HOST')
 PORT = os.getenv('DB_PORT')
 DATABASE = os.getenv('DB_DATABASE')
-
+logging.info(f"{USER}, {PASSWORD}, {HOST}, {PORT}, {DATABASE}")
 
 async def fetch_from_db(query, *params):
     logging.info(f"Подключение к БД")
@@ -32,15 +32,15 @@ async def get_emails():
     try:
         return await fetch_from_db("SELECT email FROM email_table")
     except Exception as e:
-        logging.CRITICAL(f"Произошла ошибка в запросе к phone {e}")
+        logging.log(f"Произошла ошибка в запросе к phone {e}")
 
 
 async def get_phone_numbers():
-    logging.info(f"Запросы данных о phone")
+    logging.info(f"Запросы данных о телефоннах")
     try:
         return await fetch_from_db("SELECT phone_number FROM phone_table")
     except Exception as e:
-        logging.CRITICAL(f"Произошла ошибка в запросе к phone {e}")
+        logging.log(f"Произошла ошибка в запросе к phone {e}")
 
 
 async def insert_email(email):
@@ -48,7 +48,7 @@ async def insert_email(email):
     try:
         await fetch_from_db("INSERT INTO email_table (email) VALUES ($1) ON CONFLICT DO NOTHING", email)
     except Exception as e:
-        logging.CRITICAL(f"Произошла ошибка при добавлении данных в email_table {e}")
+        logging.log(f"Произошла ошибка при добавлении данных в email_table {e}")
 
 
 async def insert_phone_number(phone_number):
@@ -56,4 +56,4 @@ async def insert_phone_number(phone_number):
     try:
         await fetch_from_db("INSERT INTO phone_table (phone_number) VALUES ($1) ON CONFLICT DO NOTHING", phone_number)
     except Exception as e:
-        logging.CRITICAL(f"Произошла ошибка при добавлении данных в phone_number {e}")
+        logging.log(f"Произошла ошибка при добавлении данных в phone_number {e}")
