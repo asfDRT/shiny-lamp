@@ -505,7 +505,7 @@ async def get_repl_logs_ansible(message: Message):
             await message.answer("Логи репликации не найдены.")
     except Exception as e:
         logging.critical(f"Ошибка выполнения команды: {e}")
-        await message.answer("Произошла ошибка при выполнении команды."
+        await message.answer("Произошла ошибка при выполнении команды.")
 
 
 
