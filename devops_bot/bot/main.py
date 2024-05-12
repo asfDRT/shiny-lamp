@@ -494,15 +494,11 @@ async def get_repl_logs_ansible(message: Message):
     Получение самого свежего лога репликации
     """
     logging.info(f"Пользователь {message.from_user.id} запросил логи репликации")
-    command = "ls -t /var/lib/postgresql/14/main/log/*.log | head -1 | xargs grep 'replication'"
+    command = "ls -t /var/lib/postgresql/14/main/log/*.log | head -1 | xargs grep 'replication' | tail -28"
 
     try:
         output = await ssh_command_for_bd(command)
-        if output:
-            limited_output = output[:4095]
-            await message.answer(f"```\nПоследние логи репликации:\n{limited_output}\n```", parse_mode=ParseMode.MARKDOWN_V2)
-        else:
-            await message.answer("Логи репликации не найдены.")
+        await message.answer(f"```\nПоследние логи репликации:\n{output}\n```", parse_mode=ParseMode.MARKDOWN_V2)
     except Exception as e:
         logging.critical(f"Ошибка выполнения команды: {e}")
         await message.answer("Произошла ошибка при выполнении команды.")
